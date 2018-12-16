@@ -1,20 +1,82 @@
 import React from "react";
+import TodoHeader from "./TodoHeader";
+import { connect } from "react-redux";
+import { createTodo, fetchTodos } from "../actions/todoActions";
+import TodoItemWithCheckbox from "./TodoItemWithCheckbox";
 
-function Todo({ listDetails }) {
-  return (
-    <div className="card">
-      <div className="card-body">
-        <h5 className="card-title">{listDetails.name}</h5>
-        <h6 className="card-subtitle mb-2 text-muted">
-          {listDetails.description}
-        </h6>
-        <p className="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
+class Todo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: ""
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+
+    setTimeout(function() {
+      dispatch(fetchTodos());
+    }, 3000);
+  }
+
+  handleChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  handleKeyUp = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    const { dispatch } = this.props;
+    dispatch(createTodo(this.state));
+    this.setState({ name: "" });
+  };
+
+  render() {
+    const { listDetails, todos } = this.props;
+    // console.log("Toods Render: ", todos);
+
+    return (
+      <div className="card">
+        <TodoHeader listDetails={listDetails} />
+        <div className="card-body">
+          <div className="row">
+            <div className="col">
+              <div
+                className="collapse multi-collapse"
+                id="multiCollapseExample2"
+              >
+                <form onSubmit={this.handleKeyUp}>
+                  <div className="form-group">
+                    <input
+                      type="test"
+                      className="form-control"
+                      placeholder="New Todo"
+                      value={this.state.name}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </form>
+              </div>
+              <TodoItemWithCheckbox todos={todos} />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default Todo;
+function mapStateToProps(state) {
+  const { todos } = state.todoReducer;
+  console.log("Todos, mapStateToProps: ", todos);
+  const { listDetails } = state.listReducer;
+  return {
+    listDetails,
+    todos
+  };
+}
+
+export default connect(mapStateToProps)(Todo);

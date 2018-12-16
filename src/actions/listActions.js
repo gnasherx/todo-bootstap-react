@@ -7,19 +7,19 @@ export const LIST_CREATED = "LIST_CREATED";
 export const DID_LIST_CREATION_ERR = "DID_LIST_CREATION_ERR";
 
 // Creating a new list
-export function createListActionCreator() {
+export function createListAc() {
   return {
     type: CREATE_LIST
   };
 }
 
-export function listCreatedActionCreator() {
+export function listCreatedAc() {
   return {
     type: LIST_CREATED
   };
 }
 
-export function listCreationErr(error) {
+export function listCreationErrAc(error) {
   return {
     type: DID_LIST_CREATION_ERR,
     error
@@ -28,17 +28,18 @@ export function listCreationErr(error) {
 
 export function createList(list) {
   return function(dispatch) {
-    dispatch(createListActionCreator());
+    dispatch(createListAc());
+    const listKey = database.ref("list").push().key;
+
     return database
-      .ref("list")
-      .push()
-      .set({ ...list })
+      .ref("list/ " + listKey)
+      .set({ ...list, listKey })
       .then(function() {
-        dispatch(listCreatedActionCreator());
+        dispatch(listCreatedAc());
       })
       .catch(function(error) {
         console.log("error: ", error);
-        dispatch(listCreationErr(error));
+        dispatch(listCreationErrAc(error));
       });
   };
 }
@@ -67,7 +68,7 @@ export function fetchLists() {
     const lists = [];
     return database.ref("list").once("value", function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val();
+        let childData = childSnapshot.val();
         lists.push(childData);
       });
       dispatch(receiveLists(lists));
@@ -85,7 +86,6 @@ export function getListDetails(index) {
 }
 
 export function showListDetails(index) {
-  console.log("Index here: ", index);
   return function(dispatch) {
     dispatch(getListDetails(index));
   };
