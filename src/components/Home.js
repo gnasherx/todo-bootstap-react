@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
-import Todo from "./Todo";
 import Sidebar from "./Sidebar";
+import Content from "./Content";
 
 function Home() {
   return (
@@ -13,7 +13,7 @@ function Home() {
             <Sidebar />
           </div>
           <div className="col-8">
-            <Todo />
+            <Content />
           </div>
         </div>
       </div>

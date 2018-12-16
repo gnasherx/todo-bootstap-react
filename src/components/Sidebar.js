@@ -1,12 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { fetchLists } from "../actions/listActions";
+import { fetchLists, showListDetails } from "../actions/listActions";
 
 class Sidebar extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchLists());
+    dispatch(fetchLists()).then(function() {
+      dispatch(showListDetails(0));
+    });
+    // this.handleClick = this.handleClick.bind(this);
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -27,23 +30,31 @@ class Sidebar extends React.Component {
   //   }
   // }
 
+  handleClick = index => {
+    const { dispatch } = this.props;
+    dispatch(showListDetails(index));
+  };
+
   render() {
     const { lists } = this.props;
-    console.log("Inside sidebar lists: ", lists);
     return (
       <ul className="list-group">
-        {lists &&
-          lists.map(function(_list, index) {
+        {lists ? (
+          lists.map((_list, index) => {
             return (
               <li
                 key={index}
                 className="list-group-item d-flex justify-content-between align-items-center"
+                onClick={() => this.handleClick(index)}
               >
                 {_list.name}
                 <span className="badge badge-primary badge-pill">0</span>
               </li>
             );
-          })}
+          })
+        ) : (
+          <p>List is empty</p>
+        )}
       </ul>
     );
   }

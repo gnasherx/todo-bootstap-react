@@ -4,7 +4,8 @@ import {
   DID_LIST_CREATION_ERR,
   REQUEST_LISTS,
   RECEIVE_LISTS,
-  DID_LIST_FETCHING_ERR
+  DID_LIST_FETCHING_ERR,
+  GET_LIST_DETAILS
 } from "../actions/listActions";
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   listCreationErr: null,
   isFetching: false,
   didListFetchingErr: false,
-  lists: []
+  lists: [],
+  listDetails: {}
 };
 
 export function listReducer(state = initialState, action) {
@@ -46,6 +48,16 @@ export function listReducer(state = initialState, action) {
     case DID_LIST_FETCHING_ERR:
       return Object.assign({}, state, {
         didListFetchingErr: true
+      });
+    case GET_LIST_DETAILS:
+      let item;
+      return Object.assign({}, state, {
+        listDetails: [...state.lists].find((list, index) => {
+          if (index === action.index) {
+            item = Object.assign({}, list);
+          }
+          return item;
+        })
       });
     default:
       return state;

@@ -74,3 +74,19 @@ export function fetchLists() {
     });
   };
 }
+
+// Show list details on Content when click on Sidebar list
+export const GET_LIST_DETAILS = "GET_LIST_DETAILS";
+export function getListDetails(index) {
+  return {
+    type: GET_LIST_DETAILS,
+    index
+  };
+}
+
+export function showListDetails(index) {
+  console.log("Index here: ", index);
+  return function(dispatch) {
+    dispatch(getListDetails(index));
+  };
+}
