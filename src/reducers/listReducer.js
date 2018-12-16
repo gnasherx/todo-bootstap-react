@@ -1,17 +1,22 @@
 import {
   CREATE_LIST,
   LIST_CREATED,
-  DID_LIST_CREATION_ERR
+  DID_LIST_CREATION_ERR,
+  REQUEST_LISTS,
+  RECEIVE_LISTS,
+  DID_LIST_FETCHING_ERR
 } from "../actions/listActions";
 
 const initialState = {
   isCreating: false,
   didListCreationErr: false,
-  listCreationErr: null
+  listCreationErr: null,
+  isFetching: false,
+  didListFetchingErr: false,
+  lists: []
 };
 
 export function listReducer(state = initialState, action) {
-  console.log("list: ", action.list);
   switch (action.type) {
     case CREATE_LIST:
       return Object.assign({}, state, {
@@ -27,6 +32,20 @@ export function listReducer(state = initialState, action) {
       return Object.create({}, state, {
         didListCreationErr: true,
         listCreationErr: action.error
+      });
+    case REQUEST_LISTS:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
+    case RECEIVE_LISTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        lists: action.lists,
+        didListFetchingErr: false
+      });
+    case DID_LIST_FETCHING_ERR:
+      return Object.assign({}, state, {
+        didListFetchingErr: true
       });
     default:
       return state;
