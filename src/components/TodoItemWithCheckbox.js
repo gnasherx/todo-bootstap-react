@@ -3,7 +3,7 @@ import React from "react";
 function TodoItemWithCheckbox({ todos }) {
   return (
     <ul>
-      {todos ? (
+      {todos.length > 0 ? (
         todos.map((_todo, index) => {
           return (
             <div className="form-check" key={index}>

@@ -1,7 +1,7 @@
 import React from "react";
 import TodoHeader from "./TodoHeader";
 import { connect } from "react-redux";
-import { createTodo, fetchTodos } from "../actions/todoActions";
+import { createTodo } from "../actions/todoActions";
 import TodoItemWithCheckbox from "./TodoItemWithCheckbox";
 
 class Todo extends React.Component {

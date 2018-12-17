@@ -38,10 +38,10 @@ class Sidebar extends React.Component {
   };
 
   render() {
-    const { lists } = this.props;
+    const { lists, todos } = this.props;
     return (
       <ul className="list-group">
-        {lists ? (
+        {lists.length > 0 ? (
           lists.map((_list, index) => {
             return (
               <li
@@ -50,7 +50,9 @@ class Sidebar extends React.Component {
                 onClick={() => this.handleClick(index)}
               >
                 {_list.name}
-                <span className="badge badge-primary badge-pill">0</span>
+                <span className="badge badge-primary badge-pill">
+                  {todos.length}
+                </span>
               </li>
             );
           })
@@ -64,8 +66,10 @@ class Sidebar extends React.Component {
 
 function mapStateToProps(state) {
   const { lists } = state.listReducer;
+  const { todos } = state.todoReducer;
   return {
-    lists
+    lists,
+    todos
   };
 }
 
