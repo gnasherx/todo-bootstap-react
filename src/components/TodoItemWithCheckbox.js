@@ -4,19 +4,23 @@ function TodoItemWithCheckbox({ todos }) {
   return (
     <ul>
       {todos ? (
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="defaultCheck1"
-          />
-          <label className="form-check-label" htmlFor="defaultCheck1">
-            {todos.name}
-          </label>
-        </div>
+        todos.map((_todo, index) => {
+          return (
+            <div className="form-check" key={index}>
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="defaultCheck1"
+              />
+              <label className="form-check-label" htmlFor="defaultCheck1">
+                {_todo.name}
+              </label>
+            </div>
+          );
+        })
       ) : (
-        "No todos for now"
+        <p>No todos for today</p>
       )}
     </ul>
   );

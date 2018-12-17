@@ -13,14 +13,6 @@ class Todo extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-
-    setTimeout(function() {
-      dispatch(fetchTodos());
-    }, 3000);
-  }
-
   handleChange(event) {
     this.setState({ name: event.target.value });
   }
@@ -36,7 +28,6 @@ class Todo extends React.Component {
 
   render() {
     const { listDetails, todos } = this.props;
-    // console.log("Toods Render: ", todos);
 
     return (
       <div className="card">
@@ -71,7 +62,6 @@ class Todo extends React.Component {
 
 function mapStateToProps(state) {
   const { todos } = state.todoReducer;
-  console.log("Todos, mapStateToProps: ", todos);
   const { listDetails } = state.listReducer;
   return {
     listDetails,

@@ -2,12 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { fetchLists, showListDetails } from "../actions/listActions";
+import { fetchTodos } from "../actions/todoActions";
 
 class Sidebar extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchLists()).then(function() {
       dispatch(showListDetails(0));
+      dispatch(fetchTodos());
     });
     // this.handleClick = this.handleClick.bind(this);
   }

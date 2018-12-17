@@ -2,8 +2,8 @@ import {
   CREATE_TODO,
   TODO_CREATED,
   DID_TODO_CREATION_ERR,
-  REQUEST_TODOS,
-  RECEIVE_TODOS,
+  REQUEST_TODO,
+  RECEIVE_TODO,
   DID_TODO_FETCHING_ERR
 } from "../actions/todoActions";
 
@@ -17,8 +17,7 @@ const initialState = {
 };
 
 export function todoReducer(state = initialState, action) {
-  console.log("Action: ", action);
-  switch (action) {
+  switch (action.type) {
     case CREATE_TODO:
       return Object.assign({}, state, {
         isCreating: true,
@@ -36,14 +35,15 @@ export function todoReducer(state = initialState, action) {
         todoCreationErr: action.error
       });
     }
-    case REQUEST_TODOS:
+    case REQUEST_TODO:
       return Object.assign({}, state, {
         isFetching: true
       });
-    case RECEIVE_TODOS:
+    case RECEIVE_TODO:
+      console.log("Action todos: ", action.todo);
       return Object.assign({}, state, {
         isFetching: false,
-        todos: action.todos,
+        todos: [...state.todos, action.todo],
         didTodoFetchingErr: false
       });
     case DID_TODO_FETCHING_ERR:

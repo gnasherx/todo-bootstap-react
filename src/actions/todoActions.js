@@ -48,20 +48,20 @@ export function createTodo(todo) {
 }
 
 // Fetching all todos from list
-export const REQUEST_TODOS = "REQUEST_TODOS";
-export const RECEIVE_TODOS = "RECEIVE_TODOS";
+export const REQUEST_TODO = "REQUEST_TODO";
+export const RECEIVE_TODO = "RECEIVE_TODO";
 export const DID_TODO_FETCHING_ERR = "DID_TODO_FETCHING_ERR";
 
-export function requestTodos() {
+export function requestTodo() {
   return {
-    type: REQUEST_TODOS
+    type: REQUEST_TODO
   };
 }
 
-export function receiveTodos(todos) {
+export function receiveTodo(todo) {
   return {
-    type: RECEIVE_TODOS,
-    todos
+    type: RECEIVE_TODO,
+    todo
   };
 }
 
@@ -70,22 +70,13 @@ export function fetchTodos() {
     const { listReducer } = getState();
     const { listDetails } = listReducer;
 
-    console.log("ListDeatils: ", listDetails.listKey);
+    dispatch(requestTodo());
 
-    dispatch(requestTodos());
-
-    const todos = [];
     return database
       .ref("todos/ " + listDetails.listKey)
-      .once("value", function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-          console.log(childSnapshot);
-          let childData = childSnapshot.val();
-          console.log("childData", childData);
-          todos.push(childData);
-        });
-        dispatch(receiveTodos(todos));
-        console.log("Todos: ", todos);
+      .on("child_added", function(data) {
+        let todo = data.val();
+        dispatch(receiveTodo(todo));
       });
   };
 }
